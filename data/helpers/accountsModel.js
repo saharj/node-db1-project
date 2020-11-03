@@ -1,3 +1,4 @@
+const { query } = require("express");
 const db = require("../dbConfig");
 
 function get(id) {
@@ -29,4 +30,15 @@ function insert(account) {
     .then(([id]) => get(id));
 }
 
-module.exports = { get, insert };
+function update(id, data) {
+  return db("accounts")
+    .where("id", id)
+    .update(data)
+    .then((changes) => (changes > 0 ? get(id) : null));
+}
+
+function remove(id) {
+  return db("accounts").where("id", id).del();
+}
+
+module.exports = { get, insert, update, remove };
